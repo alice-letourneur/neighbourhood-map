@@ -75,7 +75,11 @@ var ViewModel = function() {
 
   this.selectLocation = function(clickedLocation) {
     self.currentLocation(clickedLocation);
-  }
+  };
+
+  this.searchResults = function() {
+
+  };
 };
 
 
