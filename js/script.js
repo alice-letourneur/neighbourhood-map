@@ -78,9 +78,19 @@ var ViewModel = function() {
   };
 
   this.searchResults = function() {
-
+    this.hideListings();
+    for (var i = 0; i < markers.length; i++) {
+      if (markers[i].title == document.getElementById('search-text').value){
+        markers[i].setMap(map);
+      }
+    }
   };
-};
 
+  this.hideListings = function() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+  }
+};
 
 ko.applyBindings(new ViewModel());
