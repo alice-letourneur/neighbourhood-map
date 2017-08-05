@@ -1,15 +1,15 @@
 // Create array of locations
 var locations = [
-    {title: 'The Association', location: {lat: 51.51364, lng: -0.0813276}},
-    {title: 'Attendant', location: {lat: 51.5190854, lng: -0.141135}},
-    {title: 'Catalyst', location: {lat: 51.5197791, lng: -0.112479}},
-    {title: 'Coffee Island', location: {lat: 51.5123922, lng: -0.1280521}},
-    {title: 'Curators Coffee Studio', location: {lat: 51.5120838, lng: -0.084918}},
-    {title: 'Department of Coffee & Social Affairs', location: {lat: 51.5194387, lng: -0.1091213}},
-    {title: 'Espresso Room', location: {lat: 51.5218715, lng: -0.1200087}},
-    {title: 'The New Black', location: {lat: 51.5110634, lng: -0.0864777}},
-    {title: 'Look Mum No Hands!', location: {lat: 51.5241713, lng: -0.0990777}},
-    {title: 'Notes', location: {lat: 51.5204827, lng: -0.1172634}}
+    {title: 'The Association', location: {lat: 51.51364, lng: -0.0813276}, venueFoursquareID: '4f70a772e4b0f375fc669005'},
+    {title: 'The Attendant', location: {lat: 51.5190854, lng: -0.141135}, venueFoursquareID: '51238309e4b097759c47afa3'},
+    {title: 'Catalyst', location: {lat: 51.5197791, lng: -0.112479}, venueFoursquareID: '58510b240b7e9333972d5d3b'},
+    {title: 'Coffee Island', location: {lat: 51.5123922, lng: -0.1280521}, venueFoursquareID: '5831681f01f4330b38c28821'},
+    {title: 'Curators Coffee Studio', location: {lat: 51.5120838, lng: -0.084918}, venueFoursquareID: '4f5b23f9e4b082b23ccdd12a'},
+    {title: 'Department of Coffee & Social Affairs', location: {lat: 51.5194387, lng: -0.1091213}, venueFoursquareID: '4cfa6667ee9cb60c44fd89ad'},
+    {title: 'The Espresso Room', location: {lat: 51.5218715, lng: -0.1200087}, venueFoursquareID: '4ace06a9f964a520f5cd20e3'},
+    {title: 'The New Black', location: {lat: 51.5110634, lng: -0.0864777}, venueFoursquareID: '582216af31e59d538d03e68c'},
+    {title: 'Look Mum No Hands!', location: {lat: 51.5241713, lng: -0.0990777}, venueFoursquareID: '4bd0432a9854d13a6855f74d'},
+    {title: 'Notes Music & Coffee', location: {lat: 51.5204827, lng: -0.1172634}, venueFoursquareID: '4cdadd2dc409b60cac66d11a'}
   ];
 // Create a blank array for all the listing markers.
 var markers = [];
@@ -25,10 +25,15 @@ function initMap() {
   for (var i = 0; i < locations.length; i++) {
     var position = locations[i].location;
     var title = locations[i].title;
+    var id = locations[i].venueFoursquareID;
     var marker = new google.maps.Marker({
       map: map,
       position: position,
       title: title,
+      id: id,
+      description: '',
+      rating: '',
+      address: '',
       animation: google.maps.Animation.DROP
     });
     markers.push(marker);
@@ -52,10 +57,35 @@ function initMap() {
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
-  // Check to make sure the infowindow is not already opened on this marker.
+
   if (infowindow.marker != marker) {
+
+    var apiURL = 'https://api.foursquare.com/v2/venues/';
+    var foursquareClientID = 'SW3IZKUPHHSZQM2DVO5TVJ3TX1RIRENN3JUPETZWJKRK3EAW'
+    var foursquareSecret ='Q4OH5U1JPO1GHP0DLEPVMOZ3BPVYU0SRPFQQE2QWRX1YKUMQ';
+    var foursquareVersion = '20170805';
+    var foursquareURL = apiURL + marker.id + '?client_id=' + foursquareClientID +  '&client_secret=' + foursquareSecret +'&v=' + foursquareVersion;
+
+    $.ajax({
+      url: foursquareURL,
+      async: true,
+      success: function(data) {
+        marker.description = data.response.venue.description;
+        marker.rating = data.response.venue.rating;
+        marker.address = data.response.venue.location.address + ', ' + data.response.venue.location.city;
+        console.log(data);
+        console.log(marker.description);
+        console.log(marker.rating);
+        console.log(marker.address);
+      },
+      error: function(data) {
+        // Error handler when request to Foursquare fails
+        alert("Data from Foursquare cannot be loaded");
+      }
+    });
+    // Check to make sure the infowindow is not already opened on this marker.
     infowindow.marker = marker;
-    infowindow.setContent('<div>' + marker.title + '</div>');
+    infowindow.setContent('<div>' + marker.title + '</div>' + '<div>' + marker.description + '</div>'+ '<div>' + marker.rating + '</div>'+ '<div>' + marker.address + '</div>');
     infowindow.open(map, marker);
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick',function(){
