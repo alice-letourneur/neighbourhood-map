@@ -2,6 +2,8 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: #222;
+  font-family: "Raleway", sans-serif;
 }
 
 #map {
@@ -10,4 +12,19 @@ html, body {
 
 #box {
   float: left;
+  margin: 20px;
+}
+
+#list {
+  color: #f7ded4;
+  list-style-type: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#search-text {
+  width: 75%;
+  padding: 12px 12px;
+  font-size: 14px;
 }

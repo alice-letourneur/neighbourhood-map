@@ -31,7 +31,7 @@ function initMap() {
       position: position,
       title: title,
       id: id,
-      description: '',
+      description: 'No description available',
       rating: '',
       address: '',
       animation: google.maps.Animation.DROP
