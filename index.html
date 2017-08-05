@@ -7,9 +7,10 @@
   </head>
   <body>
     <div id="box">
-      <input id="search-button" data-bind="click: showListings" type="button" value="Show">
-      <input id="search-button" data-bind="click: hideListings" type="button" value="Hide">
-      <ul id="list" data-bind="foreach: locations">
+      <input id="search-text" type="text" placeholder="Ex: Coffee" data-bind="textInput: searchItem">
+      <input id="search-button" data-bind="click: resetListings" type="button" value="Reset">
+
+      <ul id="list" data-bind="foreach: visibleLocations">
         <li data-bind="text: title, click: $parent.clickItem"></li>
       </ul>
     </div>

@@ -36,6 +36,7 @@ function initMap() {
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
     });
+    // Bind marker to view model observable array
     viewModel.locations()[i].marker = marker;
 
     bounds.extend(markers[i].position);
@@ -63,33 +64,35 @@ function populateInfoWindow(marker, infowindow) {
   }
 };
 
-// var Location = function(data) {
-//   this.title = ko.observable(data.title);
-// };
-
 var ViewModel = function() {
   var self = this;
-  this.searchItem = ko.observable('');
   self.locations = ko.observableArray(locations);
-  self.markers = ko.observableArray([]);
-  self.visibleLocations = self.locations.slice();
-//Display the infowindow when an element of the list is clicked
-  self.clickItem = function (visibleLocations) {
-      google.maps.event.trigger(visibleLocations.marker, 'click');
+  self.visibleLocations = ko.observableArray([]);
+  self.searchItem = ko.observable("");
+  self.visibleLocations = ko.computed(function () {
+    // Filtering the locations (list items and map markers)
+    return ko.utils.arrayFilter(self.locations(), function (location) {
+      // Filtering the map markers
+      if (location.title.toLowerCase().indexOf(self.searchItem().toLowerCase()) !== -1) {
+        if (location.marker)
+          location.marker.setVisible(true);
+      } else {
+        if (location.marker)
+          location.marker.setVisible(false);
+      }
+      // Filtering the list items
+      return location.title.toLowerCase().indexOf(self.searchItem().toLowerCase()) !== -1;
+    });
+  }, self);
+
+  //Display the infowindow when an element of the list is clicked
+  self.clickItem = function (location) {
+    google.maps.event.trigger(location.marker, 'click');
   };
 
-  this.showListings = function() {
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(map);
-    }
-    self.locations(self.visibleLocations.slice());
-  }
-
-  this.hideListings = function() {
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-      self.locations.splice(0, 1);
-    }
+  //Display all locations on the map and in the list
+  this.resetListings = function() {
+    self.searchItem("");
   }
 };
 
