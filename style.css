@@ -77,7 +77,7 @@ header {
     display: none;
   }
   .sidenav {
-    width: 300px;
+    width: 300px!important;
   }
   #map {
     margin-left: 300px;
