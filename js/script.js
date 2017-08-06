@@ -23,6 +23,9 @@ var locations = [
 var markers = [];
 // Create the map
 var map;
+function mapError() {
+  alert("We are currently unable to load the map, try again later!");
+}
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'),{
     center: {lat: 51.5142381, lng: -0.0691172},
