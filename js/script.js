@@ -1,3 +1,11 @@
+function openNav() {
+    document.getElementById("menu").style.width = "250px";
+};
+
+function closeNav() {
+    document.getElementById("menu").style.width = "0";
+};
+
 // Create array of locations
 var locations = [
     {title: 'The Association', location: {lat: 51.51364, lng: -0.0813276}, venueFoursquareID: '4f70a772e4b0f375fc669005'},
@@ -131,6 +139,9 @@ var ViewModel = function() {
   //Display the infowindow when an element of the list is clicked
   self.clickItem = function (location) {
     google.maps.event.trigger(location.marker, 'click');
+    if ($(window).width() < 960) {
+      closeNav();
+    }
   };
 
   //Display all locations on the map and in the list

@@ -7,16 +7,28 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <header>
+      <div class="menu-box">
+        <span class="open-menu" onclick="openNav()">&#9776;</span>
+      </div>
+      <div class="title-box">
+        <span class="title-desktop">Your next stop for a coffee!</span>
+        <span class="title-mobile">&#9749;</span>
+      </div>
+    </header>
+    <div class="sidenav" id="menu">
+      <span class="close-menu" onclick="closeNav()">&#9776;</span>
     <div id="box">
-      <input id="search-text" type="text" placeholder="Search here..." data-bind="textInput: searchItem">
-      <input id="search-button" data-bind="click: resetListings" type="button" value="Reset">
-
+      <input id="search-text" type="text" placeholder="Search here..." data-bind="textInput: searchItem, displayClearBtn">
+      <input id="search-button" data-bind="click: resetListings" type="button" value="Clear">
       <ul id="list" data-bind="foreach: visibleLocations">
         <li data-bind="text: title, click: $parent.clickItem"></li>
       </ul>
     </div>
+  </div>
     <div id="map">
     </div>
+    <footer>This site is powered using Google Maps and Foursquare</footer>
     <script src="js/knockout_3-4-2.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/script.js"></script>

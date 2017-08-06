@@ -6,13 +6,24 @@ html, body {
   font-family: "Raleway", sans-serif;
 }
 
+footer {
+  color: #f7ded4;
+  text-align: right;
+  margin: 5px 5px;
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+header {
+  display: flex;
+}
 #map {
-  height: 100%;
+  height: 85%;
 }
 
 #box {
-  float: left;
-  margin: 20px;
+  background-color: #222;
+  padding: 5%;
 }
 
 #list {
@@ -29,6 +40,7 @@ html, body {
   font-size: 14px;
 }
 
+
 .iw-title {
   font-weight: 500;
 }
@@ -44,4 +56,75 @@ html, body {
 .iw-address {
   font-size: 12px;
   float: right;
+}
+
+
+.sidenav {
+    height: 100%;
+    position: fixed;
+    width: 0;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #222;
+    overflow-x: hidden;
+    transition: 0.1s;
+}
+
+
+@media only screen and (min-width: 900px) {
+  .open-menu, .close-menu {
+    display: none;
+  }
+  .sidenav {
+    width: 300px;
+  }
+  #map {
+    margin-left: 300px;
+  }
+  .title-box {
+    width: 100%;
+  }
+  .title-mobile {
+    display: none;
+  }
+  .title-desktop {
+    display: inline-block;
+  }
+}
+
+.open-menu {
+  color: #f7ded4;
+  cursor: pointer;
+  font-size: 35px;
+}
+.menu-box {
+  width: 33%;
+}
+.title-box {
+  width: 66%;
+  text-align: right;
+  margin: 5px 5px;
+  line-height: 1.5;
+
+}
+.title-desktop {
+  color: #f7ded4;
+  font-size: 25px;
+}
+
+.title-mobile {
+  color: #f7ded4;
+  font-size: 35px;
+}
+
+@media only screen and (max-width: 900px) {
+  .title-desktop {
+    display: none;
+  }
+}
+.close-menu {
+    color: #f7ded4;
+    cursor: pointer;
+    font-size: 35px;
 }
