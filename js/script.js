@@ -34,10 +34,10 @@ function initMap() {
   });
   var bounds = new google.maps.LatLngBounds();
   // Loop through location array to create markers
-  for (var i = 0; i < locations.length; i++) {
-    var position = locations[i].location;
-    var title = locations[i].title;
-    var id = locations[i].venueFoursquareID;
+  locations.forEach(function(location, index) {
+    var position = location.location;
+    var title = location.title;
+    var id = location.venueFoursquareID;
     var image = 'coffee.png';
     var marker = new google.maps.Marker({
       map: map,
@@ -53,11 +53,11 @@ function initMap() {
       populateInfoWindow(this, largeInfowindow);
     });
     // Bind marker to view model observable array
-    viewModel.locations()[i].marker = marker;
+    viewModel.locations()[index].marker = marker;
 
-    bounds.extend(markers[i].position);
+    bounds.extend(markers[index].position);
 
-  }
+  });
   var largeInfowindow = new google.maps.InfoWindow();
 
   // Extend the boundaries of the map for each marker
