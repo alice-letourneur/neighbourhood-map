@@ -26,14 +26,13 @@ function initMap() {
     var position = locations[i].location;
     var title = locations[i].title;
     var id = locations[i].venueFoursquareID;
+    var image = 'coffee.png';
     var marker = new google.maps.Marker({
       map: map,
       position: position,
       title: title,
       id: id,
-      description: 'No description available',
-      rating: '',
-      address: '',
+      icon: image,
       animation: google.maps.Animation.DROP
     });
     markers.push(marker);
@@ -57,9 +56,20 @@ function initMap() {
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
-
+  // Make the marker icon bounce when it's clicked
+  function toggleBounce() {
+    if (marker.getAnimation() !== null) {
+      marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      //Stops after two bounce
+      setTimeout(function(){
+				marker.setAnimation(null);
+			}, 1400);
+    }
+  };
+  toggleBounce();
   if (infowindow.marker != marker) {
-
     var apiURL = 'https://api.foursquare.com/v2/venues/';
     var foursquareClientID = 'SW3IZKUPHHSZQM2DVO5TVJ3TX1RIRENN3JUPETZWJKRK3EAW'
     var foursquareSecret ='Q4OH5U1JPO1GHP0DLEPVMOZ3BPVYU0SRPFQQE2QWRX1YKUMQ';
@@ -70,26 +80,29 @@ function populateInfoWindow(marker, infowindow) {
       url: foursquareURL,
       async: true,
       success: function(data) {
-        marker.description = data.response.venue.description;
+        // Check if a description is available, if not then display the last tip instead of the description
+        if(data.response.venue.description){
+          marker.description = data.response.venue.description;
+        } else {
+          marker.description = data.response.venue.tips.groups["0"].items["0"].text;
+        };
         marker.rating = data.response.venue.rating;
         marker.address = data.response.venue.location.address + ', ' + data.response.venue.location.city;
         console.log(data);
-        console.log(marker.description);
-        console.log(marker.rating);
-        console.log(marker.address);
+        infowindow.setContent('<div class="iw-title">' + marker.title + '<span class="iw-rating"> ' + marker.rating + '</span>' + '</div>' + '<div class="iw-description">' + marker.description + '</div>'+ '<div class="iw-address">' + marker.address + '</div>');
+        infowindow.open(map, marker);
+        marker.animation = google.maps.Animation.DROP;
+        // Make sure the marker property is cleared if the infowindow is closed.
+        infowindow.addListener('closeclick',function(){
+          infowindow.setMarker = null;
+        });
+        // Check to make sure the infowindow is not already opened on this marker.
+        infowindow.marker = marker;
       },
       error: function(data) {
         // Error handler when request to Foursquare fails
         alert("Data from Foursquare cannot be loaded");
       }
-    });
-    // Check to make sure the infowindow is not already opened on this marker.
-    infowindow.marker = marker;
-    infowindow.setContent('<div>' + marker.title + '</div>' + '<div>' + marker.description + '</div>'+ '<div>' + marker.rating + '</div>'+ '<div>' + marker.address + '</div>');
-    infowindow.open(map, marker);
-    // Make sure the marker property is cleared if the infowindow is closed.
-    infowindow.addListener('closeclick',function(){
-      infowindow.setMarker = null;
     });
   }
 };

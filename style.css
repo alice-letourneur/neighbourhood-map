@@ -28,3 +28,20 @@ html, body {
   padding: 12px 12px;
   font-size: 14px;
 }
+
+.iw-title {
+  font-weight: 500;
+}
+
+.iw-description {
+
+}
+
+.iw-rating {
+ float: right;
+}
+
+.iw-address {
+  font-size: 12px;
+  float: right;
+}
