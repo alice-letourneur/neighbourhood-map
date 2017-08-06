@@ -1,10 +1,11 @@
+
 function openNav() {
     document.getElementById("menu").style.width = "250px";
-};
+}
 
 function closeNav() {
     document.getElementById("menu").style.width = "0";
-};
+}
 
 // Create array of locations
 var locations = [
@@ -61,28 +62,28 @@ function initMap() {
 
   // Extend the boundaries of the map for each marker
   map.fitBounds(bounds);
-};
-
+}
+// Make the marker icon bounce when it's clicked
+function toggleBounce(marker) {
+  if (marker.getAnimation() !== null) {
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    //Stops after two bounce
+    setTimeout(function(){
+      marker.setAnimation(null);
+    }, 1400);
+  }
+}
 // This function populates the infowindow when the marker is clicked. We'll only allow
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
-  // Make the marker icon bounce when it's clicked
-  function toggleBounce() {
-    if (marker.getAnimation() !== null) {
-      marker.setAnimation(null);
-    } else {
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-      //Stops after two bounce
-      setTimeout(function(){
-				marker.setAnimation(null);
-			}, 1400);
-    }
-  };
-  toggleBounce();
+
+  toggleBounce(marker);
   if (infowindow.marker != marker) {
     var apiURL = 'https://api.foursquare.com/v2/venues/';
-    var foursquareClientID = 'SW3IZKUPHHSZQM2DVO5TVJ3TX1RIRENN3JUPETZWJKRK3EAW'
+    var foursquareClientID = 'SW3IZKUPHHSZQM2DVO5TVJ3TX1RIRENN3JUPETZWJKRK3EAW';
     var foursquareSecret ='Q4OH5U1JPO1GHP0DLEPVMOZ3BPVYU0SRPFQQE2QWRX1YKUMQ';
     var foursquareVersion = '20170805';
     var foursquareURL = apiURL + marker.id + '?client_id=' + foursquareClientID +  '&client_secret=' + foursquareSecret +'&v=' + foursquareVersion;
@@ -96,7 +97,7 @@ function populateInfoWindow(marker, infowindow) {
           marker.description = data.response.venue.description;
         } else {
           marker.description = data.response.venue.tips.groups["0"].items["0"].text;
-        };
+        }
         marker.rating = data.response.venue.rating;
         marker.address = data.response.venue.location.address + ', ' + data.response.venue.location.city;
         console.log(data);
@@ -116,7 +117,7 @@ function populateInfoWindow(marker, infowindow) {
       }
     });
   }
-};
+}
 
 var ViewModel = function() {
   var self = this;
@@ -150,7 +151,7 @@ var ViewModel = function() {
   //Display all locations on the map and in the list
   this.resetListings = function() {
     self.searchItem("");
-  }
+  };
 };
 
 // Instantiate the ViewModel
